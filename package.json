@@ -1,0 +1,17 @@
+{
+  "name": "@spleenboy/fsdb",
+  "version": "1.0.0",
+  "description": "A file-system based database",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "npx tsc -w",
+    "lint": "npx tslint --project .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.6"
+  }
+}
