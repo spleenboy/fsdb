@@ -1,22 +1,26 @@
 import { EventEmitter, Handler, Unsubscribe } from "./event-emitter";
-import { Change, Reactor } from "./reactor";
+import { Reactor, Property, Change } from "./reactor";
 
-export class Reactive {
-  data: object;
+export class Reactive<T extends object> {
+  data: T;
   changes: Change[] = [];
+  unwatch?: Unsubscribe;
+  #change: EventEmitter<Change>;
 
-  protected changed: EventEmitter<Change>;
+  constructor(data: T) {
+    this.#change = new EventEmitter<Change>();
+    const reactor = new Reactor(this.#change);
+    this.data = new Proxy(data, reactor) as T;
+    this.watch();
+  }
 
-  constructor(data: object) {
-    this.data = data;
-    this.changed = new EventEmitter<Change>();
-
-    const reactor = new Reactor(this.changed);
-    const proxy = new Proxy(data, reactor);
-    this.changed.subscribe((change) => this.changes.push(change));
+  watch() {
+    this.unwatch = this.#change.subscribe((change) => {
+      this.changes.push(change);
+    });
   }
 
   onChange(handler: Handler<Change>): Unsubscribe {
-    return this.changed.subscribe(handler);
+    return this.#change.subscribe(handler);
   }
 }

@@ -10,10 +10,10 @@ export interface Change {
 }
 
 export class Reactor {
-  protected _emitter?: EventEmitter<Change>;
+  #emitter: EventEmitter<Change>;
 
-  constructor(emitter?: EventEmitter<Change>) {
-    this._emitter = emitter;
+  constructor(emitter: EventEmitter<Change>) {
+    this.#emitter = emitter;
   }
 
   get(target: object, prop: Property, receiver?: any): any {
@@ -25,7 +25,7 @@ export class Reactor {
     if (oldValue !== newValue) {
       const time = Date.now();
       const change = { prop, oldValue, newValue, time };
-      this._emitter?.emit(change);
+      this.#emitter.emit(change);
     }
     return Reflect.set(target, prop, newValue, receiver);
   }

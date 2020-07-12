@@ -12,15 +12,14 @@ export class Db {
     this.adapter = config.encoder;
   }
 
-  public async get(path: string, lock: boolean = false): Promise<Record> {
-    const file = await this.storage.get(path, lock);
-    const doc = this.adapter.toObject(file);
-    const record = new Record(doc, file);
-    if (lock) {
-      record.key = file.lock.key;
-    }
+  public async get<T extends object>(path: string): Promise<Record<T>> {
+    const file = await this.storage.get(path);
+    const doc = this.adapter.toObject(file) as T;
+    const record = new Record<T>(doc, file);
     return record;
   }
+
+  public async update(path: string, updater: (record: Record) => object) {}
 
   public async save(doc: Document): Promise<boolean> {
     const newFile = this.adapter.toFile(doc);
