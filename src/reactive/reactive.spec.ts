@@ -52,4 +52,15 @@ describe("Reactive objects", () => {
     expect<any>(change.oldValue).toBe(0);
     expect<any>(change.newValue).toBe(1);
   });
+
+  it("should ignore no change", () => {
+    interface Data {
+      num: number;
+    }
+    const actual: Data = { num: 1 };
+    const reactive = new Reactive<Data>(actual);
+    expect<number>(reactive.changes.length).toBe(0);
+    reactive.data.num = 1;
+    expect<number>(reactive.changes.length).toBe(0);
+  });
 });

@@ -2,12 +2,15 @@
 
 I wanted a database-like javascript tool that game me more control over how the data gets stored and formatted. This library offers a file-based database with modular support for both the file format and storage mechanism.
 
-## Syntax
+## UNDER CONSTRUCTION
+
+This tool is by no means production ready. I'm just throwing it into a public repo to hold myself accountable about its development.
+
+## Proposed Syntax
 
 ```
-import fsdb from '@spleenboy/fsdb';
-
-const todos = fsdb.collection('todo');
+import fsdb from "@spleenboy/fsdb";
+import { ToDo, Note } from "examples/types";
 
 
 // Initialize
@@ -23,17 +26,6 @@ fsdb.init({
     }
 });
 
-// Getting a document
-const doc = fsdb.get(id);
-
-// Finding many docs
-const docs = fsdb.query()
-  .and('title', /^Software .+$/g)
-  .andNone('body.keywords', 'blog post')
-  .limit(10)
-  .offset(1)
-  .get();
-
-// Updating
+const todo = await fsdb.get<ToDo>('todos/all');
 
 ```
